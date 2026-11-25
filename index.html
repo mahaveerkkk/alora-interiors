@@ -152,10 +152,15 @@
         </div>
     </header>
 
-    <!-- HERO SECTION WITH INTERACTIVE 3D WEBGL CANVAS -->
+    <!-- HERO SECTION WITH INTERACTIVE 3D ARCHITECTURAL PAVILION -->
     <section id="spatial-3d" class="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
         
-        <!-- THREE.JS WEBGL 3D CANVAS BACKGROUND -->
+        <!-- PHOTOREALISTIC LUXURY PENTHOUSE BACKGROUND -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=80" alt="Architectural Penthouse Living" class="w-full h-full object-cover filter brightness-[0.25] contrast-110">
+        </div>
+
+        <!-- THREE.JS WEBGL 3D ARCHITECTURAL MODEL CANVAS -->
         <div id="canvas-container" class="absolute inset-0 z-0 pointer-events-auto"></div>
 
         <!-- AMBIENT GRADIENT OVERLAYS -->
@@ -165,9 +170,9 @@
         <!-- HERO CONTENT -->
         <div class="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center flex flex-col items-center pointer-events-none">
             
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-gold-400/30 text-gold-400 text-xs uppercase tracking-[0.3em] mb-6 pointer-events-auto">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-gold-400/30 text-gold-400 text-xs uppercase tracking-[0.3em] mb-6 pointer-events-auto shadow-lg">
                 <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
-                Interactive 3D Spatial Pavilion (Drag to Rotate 360°)
+                Interactive 3D Architectural Villa (Move Cursor To Explore)
             </div>
 
             <h1 class="font-architect text-4xl sm:text-7xl lg:text-8xl font-normal text-white leading-[1.05] max-w-4xl mb-6">
@@ -191,7 +196,7 @@
             <!-- INTERACTION HINT -->
             <div class="mt-14 flex items-center gap-2 text-xs uppercase tracking-widest text-white/40">
                 <svg class="w-4 h-4 animate-bounce text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-                <span>Scroll down to enter spatial case studies</span>
+                <span>Scroll down to inspect spatial case studies</span>
             </div>
         </div>
     </section>
@@ -209,24 +214,24 @@
         </div>
 
         <!-- INTERACTIVE SLIDER CONTAINER -->
-        <div class="relative max-w-5xl mx-auto h-[400px] sm:h-[550px] rounded-3xl overflow-hidden border border-white/10 before-after-container gold-glow" id="beforeAfterSlider">
+        <div class="relative max-w-5xl mx-auto h-[380px] sm:h-[550px] rounded-3xl overflow-hidden border border-white/10 before-after-container gold-glow cursor-ew-resize" id="beforeAfterSlider">
             
             <!-- "AFTER" IMAGE (FULL BACKGROUND) -->
-            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" alt="Finished Luxury Interior Penthouse" class="absolute inset-0 w-full h-full object-cover">
-            <div class="absolute bottom-6 right-6 px-4 py-2 rounded-full glass-panel text-xs uppercase tracking-wider text-gold-400 font-bold border border-gold-400/40">
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" alt="Finished Luxury Interior Penthouse" class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none">
+            <div class="absolute bottom-6 right-6 px-4 py-2 rounded-full glass-panel text-xs uppercase tracking-wider text-gold-400 font-bold border border-gold-400/40 z-10 pointer-events-none shadow-lg">
                 ✨ After: Finished Penthouse
             </div>
 
             <!-- "BEFORE" IMAGE (CLIPPED OVERLAY) -->
-            <div class="absolute inset-0 overflow-hidden" id="beforeLayer" style="width: 50%;">
-                <img src="https://images.unsplash.com/photo-1541888946425-d0fbb18015f6?auto=format&fit=crop&w=1600&q=80" alt="Raw Concrete Construction Shell" class="absolute inset-0 w-[100vw] max-w-5xl h-full object-cover filter contrast-125 brightness-90">
-                <div class="absolute bottom-6 left-6 px-4 py-2 rounded-full glass-panel text-xs uppercase tracking-wider text-white/80 font-bold border border-white/20">
-                    🏗️ Before: Raw Concrete Shell
+            <div class="absolute inset-y-0 left-0 overflow-hidden select-none pointer-events-none" id="beforeLayer" style="width: 50%;">
+                <img id="beforeImg" src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1600&q=80" alt="Raw Unfurnished Construction Shell" class="absolute inset-y-0 left-0 h-full object-cover max-w-none select-none">
+                <div class="absolute bottom-6 left-6 px-4 py-2 rounded-full glass-panel text-xs uppercase tracking-wider text-white/90 font-bold border border-white/20 z-10 shadow-lg">
+                    🏗️ Before: Raw Unfinished Shell
                 </div>
             </div>
 
             <!-- DRAGGABLE DIVIDER HANDLE -->
-            <div class="slider-handle" id="sliderHandle" style="left: 50%;">
+            <div class="slider-handle z-20" id="sliderHandle" style="left: 50%;">
                 <div class="slider-button">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
                 </div>
@@ -502,46 +507,114 @@
         // 1. THREE.JS INTERACTIVE 3D WEBGL HERO PAVILION
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 7;
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.8, 8.5);
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
-        // CREATE ARCHITECTURAL 3D WIREFRAME PAVILION
-        const geometry = new THREE.IcosahedronGeometry(3.2, 2);
-        const wireframeGeometry = new THREE.WireframeGeometry(geometry);
-        const lineMaterial = new THREE.LineBasicMaterial({
-            color: 0xD4AF37,
-            transparent: true,
-            opacity: 0.35,
-            linewidth: 1
-        });
-        const pavilion = new THREE.LineSegments(wireframeGeometry, lineMaterial);
-        scene.add(pavilion);
+        // CREATE ARCHITECTURAL 3D MODERNIST RESIDENCE GROUP
+        const villaGroup = new THREE.Group();
+        scene.add(villaGroup);
 
-        // INNER FLOATING METALLIC NUCLEUS
-        const innerGeom = new THREE.OctahedronGeometry(1.6, 0);
-        const innerMat = new THREE.MeshStandardMaterial({
-            color: 0xC5A059,
-            metalness: 0.9,
-            roughness: 0.2,
-            wireframe: false
+        // 1. Foundation Slab (Dark Travertine)
+        const slabGeom = new THREE.BoxGeometry(7, 0.2, 4.8);
+        const slabMat = new THREE.MeshStandardMaterial({
+            color: 0x1E1F24,
+            roughness: 0.6,
+            metalness: 0.2
         });
-        const nucleus = new THREE.Mesh(innerGeom, innerMat);
-        scene.add(nucleus);
+        const floorSlab = new THREE.Mesh(slabGeom, slabMat);
+        floorSlab.position.y = -1.2;
+        villaGroup.add(floorSlab);
+
+        // 2. Cantilevered Roof Slab (with Golden Trim)
+        const roofGeom = new THREE.BoxGeometry(7.6, 0.22, 5.4);
+        const roofMat = new THREE.MeshStandardMaterial({
+            color: 0x16171B,
+            roughness: 0.4,
+            metalness: 0.6
+        });
+        const roofSlab = new THREE.Mesh(roofGeom, roofMat);
+        roofSlab.position.y = 1.3;
+        villaGroup.add(roofSlab);
+
+        // 3. Architectural Wireframe Edges (Golden Blueprint Lines)
+        const roofEdges = new THREE.LineSegments(
+            new THREE.EdgesGeometry(roofGeom),
+            new THREE.LineBasicMaterial({ color: 0xD4AF37, linewidth: 2 })
+        );
+        roofEdges.position.y = 1.3;
+        villaGroup.add(roofEdges);
+
+        const floorEdges = new THREE.LineSegments(
+            new THREE.EdgesGeometry(slabGeom),
+            new THREE.LineBasicMaterial({ color: 0xD4AF37, linewidth: 1.5 })
+        );
+        floorEdges.position.y = -1.2;
+        villaGroup.add(floorEdges);
+
+        // 4. Structural Slim Architectural Columns (Matte Black & Brass)
+        const colGeom = new THREE.CylinderGeometry(0.05, 0.05, 2.3, 16);
+        const colMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, metalness: 0.9, roughness: 0.2 });
+        const colPositions = [
+            [-3.2, 0.05, -2.1],
+            [3.2, 0.05, -2.1],
+            [-3.2, 0.05, 2.1],
+            [3.2, 0.05, 2.1],
+            [0, 0.05, -2.1]
+        ];
+        colPositions.forEach(pos => {
+            const col = new THREE.Mesh(colGeom, colMat);
+            col.position.set(pos[0], pos[1], pos[2]);
+            villaGroup.add(col);
+        });
+
+        // 5. Floor-to-Ceiling Tinted Glass Facade
+        const glassGeom = new THREE.PlaneGeometry(6.4, 2.3);
+        const glassMat = new THREE.MeshPhysicalMaterial({
+            color: 0xE8D5A5,
+            transparent: true,
+            opacity: 0.25,
+            roughness: 0.1,
+            metalness: 0.1,
+            transmission: 0.9
+        });
+        const glassWall = new THREE.Mesh(glassGeom, glassMat);
+        glassWall.position.set(0, 0.05, 0.8);
+        villaGroup.add(glassWall);
+
+        // 6. Interior Floating Feature (Italian Marble Island Block)
+        const islandGeom = new THREE.BoxGeometry(2.4, 0.8, 1.2);
+        const islandMat = new THREE.MeshStandardMaterial({
+            color: 0xE6DFD5,
+            roughness: 0.3,
+            metalness: 0.1
+        });
+        const island = new THREE.Mesh(islandGeom, islandMat);
+        island.position.set(-0.6, -0.7, -0.6);
+        villaGroup.add(island);
+
+        // 7. Architectural Floor Grid
+        const gridHelper = new THREE.GridHelper(12, 16, 0xD4AF37, 0x333333);
+        gridHelper.position.y = -1.35;
+        scene.add(gridHelper);
 
         // LIGHTING
-        const pointLight = new THREE.PointLight(0xD4AF37, 2, 50);
-        pointLight.position.set(5, 5, 5);
-        scene.add(pointLight);
+        const interiorPointLight = new THREE.PointLight(0xF4D288, 3, 15);
+        interiorPointLight.position.set(0, 0.5, 0);
+        scene.add(interiorPointLight);
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        const warmLight = new THREE.DirectionalLight(0xFFE5B4, 1.2);
+        warmLight.position.set(6, 8, 5);
+        scene.add(warmLight);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         scene.add(ambientLight);
 
-        // MOUSE INTERACTION & SCROLL PARALLAX
+        // MOUSE INTERACTION & GENTLE ROTATION
         let mouseX = 0, mouseY = 0;
         let targetX = 0, targetY = 0;
 
@@ -554,20 +627,15 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            targetX = mouseX * 0.8;
-            targetY = mouseY * 0.8;
+            targetX = mouseX * 0.7;
+            targetY = mouseY * 0.4;
 
-            pavilion.rotation.y += 0.003;
-            pavilion.rotation.x += 0.001;
+            // Subtle architectural rotation with mouse steering
+            villaGroup.rotation.y += 0.002;
+            villaGroup.rotation.y += (targetX - villaGroup.rotation.y) * 0.04;
+            villaGroup.rotation.x = 0.15 + (targetY * 0.1);
 
-            nucleus.rotation.y -= 0.006;
-            nucleus.rotation.z += 0.004;
-
-            // Camera reacts to mouse
-            camera.position.x += (targetX - camera.position.x) * 0.05;
-            camera.position.y += (targetY - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-
+            camera.lookAt(0, 0, 0);
             renderer.render(scene, camera);
         }
         animate();
@@ -577,6 +645,7 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            syncSliderImageWidth();
         });
 
         // 2. INTERACTIVE BEFORE & AFTER SLIDER LOGIC
@@ -584,6 +653,16 @@
         const beforeLayer = document.getElementById('beforeLayer');
         const handle = document.getElementById('sliderHandle');
         let isSliding = false;
+
+        function syncSliderImageWidth() {
+            const beforeImg = document.getElementById('beforeImg');
+            if (slider && beforeImg) {
+                beforeImg.style.width = slider.offsetWidth + 'px';
+            }
+        }
+        window.addEventListener('load', syncSliderImageWidth);
+        setTimeout(syncSliderImageWidth, 100);
+        setTimeout(syncSliderImageWidth, 500);
 
         function setSliderPosition(x) {
             const rect = slider.getBoundingClientRect();
