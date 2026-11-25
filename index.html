@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALORA • Spatial Architecture & Ultra-Luxury Interiors</title>
+    <meta name="description" content="Awwwards-recognized architectural practice crafting high-end bespoke residences, penthouses, and private estates.">
+    
+    <!-- Google Fonts: Italiana (Luxury High Fashion Architecture) & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js (3D WebGL Engine) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP & ScrollTrigger (Awwwards Scrollytelling Engine) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        noir: '#08080A',
+                        charcoal: '#121316',
+                        slateCard: '#18191E',
+                        travertine: '#F4EFE6',
+                        gold: {
+                            400: '#D4AF37',
+                            500: '#C5A059',
+                            600: '#9B782E'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Italiana"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #08080A;
+            color: #F4EFE6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-architect {
+            font-family: 'Italiana', serif;
+        }
+
+        /* 3D Perspective Card Tilt */
+        .perspective-container {
+            perspective: 1200px;
+        }
+
+        .tilt-card {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        .glass-panel {
+            background: rgba(18, 19, 22, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Custom Drag Slider for Before/After */
+        .before-after-container {
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #D4AF37;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #08080A;
+            border: 2px solid #D4AF37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #D4AF37;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Ambient Glow */
+        .gold-glow {
+            box-shadow: 0 0 50px -10px rgba(212, 175, 55, 0.15);
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500 selection:text-black">
+
+    <!-- TOP TICKER -->
+    <div class="bg-noir border-b border-white/5 py-2 px-4 text-center text-[11px] uppercase tracking-[0.25em] text-gold-400 font-semibold flex items-center justify-center gap-3">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-gold-400 animate-ping"></span>
+        <span>Architectural Digest Winner 2026 • Bespoke Residences & Penthouses</span>
+        <span class="hidden md:inline text-white/30">•</span>
+        <a href="#consultation" class="hidden md:inline text-white/80 hover:text-gold-400 underline transition-colors">Book Private Consultation &rarr;</a>
+    </div>
+
+    <!-- FLOATING GLASS HEADER -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-white/5 transition-all">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- LOGO -->
+            <a href="#" class="flex flex-col">
+                <span class="font-architect text-3xl md:text-4xl tracking-widest text-white leading-none">ALORA</span>
+                <span class="text-[8px] uppercase tracking-[0.4em] text-gold-400 font-bold mt-1">Architecture & Interiors</span>
+            </a>
+
+            <!-- NAVIGATION -->
+            <nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest text-white/70">
+                <a href="#spatial-3d" class="hover:text-gold-400 transition-colors">3D Pavilion</a>
+                <a href="#transformation" class="hover:text-gold-400 transition-colors">Before / After</a>
+                <a href="#material-lab" class="hover:text-gold-400 transition-colors">Material Studio</a>
+                <a href="#projects" class="hover:text-gold-400 transition-colors">Masterpieces</a>
+            </nav>
+
+            <!-- CTA -->
+            <div class="flex items-center gap-3">
+                <a href="tel:+919528582084" class="hidden sm:inline-flex items-center gap-2 text-xs uppercase tracking-wider text-white/80 px-4 py-2 rounded-full border border-white/10 hover:border-gold-400 transition-colors">
+                    Direct Line
+                </a>
+                <button onclick="openInquiryModal()" class="px-5 py-2.5 rounded-full bg-gold-500 hover:bg-gold-400 text-noir text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-lg shadow-gold-500/20">
+                    Inquire Project
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION WITH INTERACTIVE 3D WEBGL CANVAS -->
+    <section id="spatial-3d" class="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
+        
+        <!-- THREE.JS WEBGL 3D CANVAS BACKGROUND -->
+        <div id="canvas-container" class="absolute inset-0 z-0 pointer-events-auto"></div>
+
+        <!-- AMBIENT GRADIENT OVERLAYS -->
+        <div class="absolute inset-0 bg-radial-gradient from-transparent via-noir/60 to-noir pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-noir to-transparent pointer-events-none"></div>
+
+        <!-- HERO CONTENT -->
+        <div class="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center flex flex-col items-center pointer-events-none">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-gold-400/30 text-gold-400 text-xs uppercase tracking-[0.3em] mb-6 pointer-events-auto">
+                <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
+                Interactive 3D Spatial Pavilion (Drag to Rotate 360°)
+            </div>
+
+            <h1 class="font-architect text-4xl sm:text-7xl lg:text-8xl font-normal text-white leading-[1.05] max-w-4xl mb-6">
+                Architecture That <br>
+                <span class="italic text-gold-400">Transcends Time.</span>
+            </h1>
+
+            <p class="text-white/70 text-base sm:text-xl font-light max-w-2xl leading-relaxed mb-10">
+                Sculpting private luxury estates, sky penthouses, and bespoke interiors with Italian travertine, fluted walnut, and architectural chiaroscuro lighting.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 w-full justify-center max-w-md pointer-events-auto">
+                <button onclick="openInquiryModal()" class="w-full sm:w-auto px-8 py-4 rounded-full bg-gold-500 hover:bg-gold-400 text-noir font-bold text-xs uppercase tracking-widest transition-all hover:scale-105 shadow-xl shadow-gold-500/20">
+                    Commission A Residence
+                </button>
+                <a href="#transformation" class="w-full sm:w-auto px-8 py-4 rounded-full glass-panel border border-white/20 hover:border-gold-400 text-white font-medium text-xs uppercase tracking-widest transition-all">
+                    Explore Transformations &darr;
+                </a>
+            </div>
+
+            <!-- INTERACTION HINT -->
+            <div class="mt-14 flex items-center gap-2 text-xs uppercase tracking-widest text-white/40">
+                <svg class="w-4 h-4 animate-bounce text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                <span>Scroll down to enter spatial case studies</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: INTERACTIVE BEFORE & AFTER SPATIAL CURTAIN SLIDER -->
+    <section id="transformation" class="py-28 max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-xs uppercase tracking-[0.3em] text-gold-400 font-bold">Raw Shell To Masterpiece</span>
+            <h2 class="font-architect text-4xl sm:text-6xl text-white mt-2 mb-4">
+                The Spatial Metamorphosis
+            </h2>
+            <p class="text-white/60 text-sm sm:text-base font-light">
+                Drag the interactive brass divider left and right to inspect the dramatic transformation from raw concrete shell into a finished Italian travertine penthouse.
+            </p>
+        </div>
+
+        <!-- INTERACTIVE SLIDER CONTAINER -->
+        <div class="relative max-w-5xl mx-auto h-[400px] sm:h-[550px] rounded-3xl overflow-hidden border border-white/10 before-after-container gold-glow" id="beforeAfterSlider">
+            
+            <!-- "AFTER" IMAGE (FULL BACKGROUND) -->
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" alt="Finished Luxury Interior Penthouse" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute bottom-6 right-6 px-4 py-2 rounded-full glass-panel text-xs uppercase tracking-wider text-gold-400 font-bold border border-gold-400/40">
+                ✨ After: Finished Penthouse
+            </div>
+
+            <!-- "BEFORE" IMAGE (CLIPPED OVERLAY) -->
+            <div class="absolute inset-0 overflow-hidden" id="beforeLayer" style="width: 50%;">
+                <img src="https://images.unsplash.com/photo-1541888946425-d0fbb18015f6?auto=format&fit=crop&w=1600&q=80" alt="Raw Concrete Construction Shell" class="absolute inset-0 w-[100vw] max-w-5xl h-full object-cover filter contrast-125 brightness-90">
+                <div class="absolute bottom-6 left-6 px-4 py-2 rounded-full glass-panel text-xs uppercase tracking-wider text-white/80 font-bold border border-white/20">
+                    🏗️ Before: Raw Concrete Shell
+                </div>
+            </div>
+
+            <!-- DRAGGABLE DIVIDER HANDLE -->
+            <div class="slider-handle" id="sliderHandle" style="left: 50%;">
+                <div class="slider-button">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- DETAILS BELOW SLIDER -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-10">
+            <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                <span class="text-xs uppercase tracking-wider text-gold-400 font-bold block mb-1">Total Floor Area</span>
+                <p class="font-architect text-3xl text-white">8,400 Sq. Ft</p>
+                <p class="text-xs text-white/50 mt-1">Duplex Penthouse at Civil Lines</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                <span class="text-xs uppercase tracking-wider text-gold-400 font-bold block mb-1">Execution Timeline</span>
+                <p class="font-architect text-3xl text-white">120 Days</p>
+                <p class="text-xs text-white/50 mt-1">From Demolition to Handover</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                <span class="text-xs uppercase tracking-wider text-gold-400 font-bold block mb-1">Project Valuation</span>
+                <p class="font-architect text-3xl text-white">₹1.85 Cr</p>
+                <p class="text-xs text-white/50 mt-1">Complete Bespoke Materialization</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTIVE 3D MATERIAL PALETTE STUDIO -->
+    <section id="material-lab" class="py-28 bg-charcoal/50 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- LEFT CONTENT -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs uppercase tracking-[0.3em] text-gold-400 font-bold">Interactive Materializer</span>
+                    <h2 class="font-architect text-4xl sm:text-5xl text-white leading-tight">
+                        Curate Your Signature Architectural Palette
+                    </h2>
+                    <p class="text-white/70 font-light leading-relaxed text-sm sm:text-base">
+                        Select a tactile material below to see how our architectural studio synchronizes ambient lighting, micro-textures, and reflections in real time.
+                    </p>
+
+                    <!-- MATERIAL SELECTORS -->
+                    <div class="space-y-3 pt-2" id="materialOptions">
+                        <button onclick="selectMaterial('travertine', this)" class="material-btn active w-full p-4 rounded-2xl glass-panel border border-gold-400 flex items-center justify-between text-left transition-all">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-[#E8E1D3] border border-white/20 inline-block shadow"></span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Italian Roman Travertine</p>
+                                    <p class="text-xs text-white/50">Honed, porous, warm sunlight reflection</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-gold-400">Selected</span>
+                        </button>
+
+                        <button onclick="selectMaterial('calacatta', this)" class="material-btn w-full p-4 rounded-2xl glass-panel border border-white/10 flex items-center justify-between text-left transition-all hover:border-gold-400/50">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-gradient-to-tr from-gray-200 via-white to-gray-400 border border-white/20 inline-block shadow"></span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Calacatta Gold Marble</p>
+                                    <p class="text-xs text-white/50">Bookmatched grey-gold organic veins</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-white/40">Select</span>
+                        </button>
+
+                        <button onclick="selectMaterial('walnut', this)" class="material-btn w-full p-4 rounded-2xl glass-panel border border-white/10 flex items-center justify-between text-left transition-all hover:border-gold-400/50">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-[#3B281B] border border-white/20 inline-block shadow"></span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Fluted Smoked American Walnut</p>
+                                    <p class="text-xs text-white/50">Acoustic ribbed panels, matte oil finish</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-white/40">Select</span>
+                        </button>
+
+                        <button onclick="selectMaterial('brass', this)" class="material-btn w-full p-4 rounded-2xl glass-panel border border-white/10 flex items-center justify-between text-left transition-all hover:border-gold-400/50">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#8C6D23] border border-white/20 inline-block shadow"></span>
+                                <div>
+                                    <p class="text-sm font-bold text-white">Brushed Patinated Brass</p>
+                                    <p class="text-xs text-white/50">Hand-finished custom metal joinery</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-white/40">Select</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RIGHT PREVIEW CANVAS -->
+                <div class="lg:col-span-7">
+                    <div class="relative aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                        <img id="materialPreviewImage" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" alt="Material Architectural Space" class="w-full h-full object-cover transition-all duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-noir/80 via-transparent to-transparent"></div>
+                        
+                        <div class="absolute bottom-6 left-6 right-6 glass-panel p-6 rounded-2xl border border-white/10 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-widest text-gold-400 font-bold block" id="previewCategory">Tactile Atmosphere</span>
+                                <h3 class="font-architect text-2xl text-white" id="previewTitle">Roman Travertine & Warm Natural Light</h3>
+                            </div>
+                            <button onclick="openInquiryModal()" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-gold-500 hover:text-noir text-white text-xs font-bold uppercase tracking-wider transition-all">
+                                Request Samples
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: SPATIAL MASTERPIECES (TILT BENTO GRID) -->
+    <section id="projects" class="py-28 max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-20">
+            <span class="text-xs uppercase tracking-[0.3em] text-gold-400 font-bold">Curated Portfolio</span>
+            <h2 class="font-architect text-4xl sm:text-6xl text-white mt-2 mb-4">
+                Selected Private Commissions
+            </h2>
+            <p class="text-white/60 text-sm sm:text-base font-light">
+                Hover to feel the 3D perspective depth. Click any estate to review square footage, materials and architectural blueprints.
+            </p>
+        </div>
+
+        <!-- BENTO PERSPECTIVE GRID -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-container">
+            
+            <!-- PROJECT 1 -->
+            <div onclick="openProjectModal('The Obsidian Sky Villa', 'Jaipur Skyline • 9,200 Sq. Ft', 'Italian Marble, Fluted Oak, Cantilevered Glass Balcony', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80')" class="tilt-card glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-gold-400/50 cursor-pointer group">
+                <div class="aspect-[4/3] overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80" alt="The Obsidian Sky Villa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <span class="absolute top-4 left-4 px-3 py-1 bg-noir/80 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-wider text-gold-400 border border-gold-400/30">Sky Penthouse</span>
+                </div>
+                <div class="p-6">
+                    <p class="text-xs uppercase tracking-widest text-gold-400 font-bold mb-1">C-Scheme, Jaipur</p>
+                    <h3 class="font-architect text-2xl text-white group-hover:text-gold-400 transition-colors">The Obsidian Sky Villa</h3>
+                    <p class="text-xs text-white/50 mt-2 font-light">
+                        Cantilevered glass sky-deck, custom bronze fire-pit, and double-height fluted walnut library.
+                    </p>
+                    <div class="pt-4 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-gold-400 font-bold">
+                        <span>Inspect Masterpiece &rarr;</span>
+                        <span class="text-white/40 font-normal">9,200 sq.ft</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROJECT 2 -->
+            <div onclick="openProjectModal('Villa Bellisima Estate', 'Rambagh Enclave • 14,000 Sq. Ft', 'Beige Travertine, Internal Water Courtyard, Bespoke Velvet', 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80')" class="tilt-card glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-gold-400/50 cursor-pointer group">
+                <div class="aspect-[4/3] overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1000&q=80" alt="Villa Bellisima Estate" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <span class="absolute top-4 left-4 px-3 py-1 bg-noir/80 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-wider text-gold-400 border border-gold-400/30">Private Estate</span>
+                </div>
+                <div class="p-6">
+                    <p class="text-xs uppercase tracking-widest text-gold-400 font-bold mb-1">Rambagh, Jaipur</p>
+                    <h3 class="font-architect text-2xl text-white group-hover:text-gold-400 transition-colors">Villa Bellisima Estate</h3>
+                    <p class="text-xs text-white/50 mt-2 font-light">
+                        Monolithic limestone architecture centered around an open-sky reflection pool and private art pavilion.
+                    </p>
+                    <div class="pt-4 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-gold-400 font-bold">
+                        <span>Inspect Masterpiece &rarr;</span>
+                        <span class="text-white/40 font-normal">14,000 sq.ft</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROJECT 3 -->
+            <div onclick="openProjectModal('The Brutalist Glasshouse', 'Civil Lines • 6,800 Sq. Ft', 'Raw Board-Formed Concrete, Smoked Brass, Lush Tropical Flora', 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80')" class="tilt-card glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-gold-400/50 cursor-pointer group">
+                <div class="aspect-[4/3] overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=80" alt="The Brutalist Glasshouse" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <span class="absolute top-4 left-4 px-3 py-1 bg-noir/80 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-wider text-gold-400 border border-gold-400/30">Architectural Residence</span>
+                </div>
+                <div class="p-6">
+                    <p class="text-xs uppercase tracking-widest text-gold-400 font-bold mb-1">Civil Lines, Jaipur</p>
+                    <h3 class="font-architect text-2xl text-white group-hover:text-gold-400 transition-colors">The Brutalist Glasshouse</h3>
+                    <p class="text-xs text-white/50 mt-2 font-light">
+                        Seamless indoor-outdoor tropical glass pavilions surrounded by architectural water cascades.
+                    </p>
+                    <div class="pt-4 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-gold-400 font-bold">
+                        <span>Inspect Masterpiece &rarr;</span>
+                        <span class="text-white/40 font-normal">6,800 sq.ft</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 5: PRIVATE CONSULTATION INQUIRY MODAL / FORM -->
+    <section id="consultation" class="py-24 max-w-4xl mx-auto px-6">
+        <div class="glass-panel p-8 sm:p-14 rounded-3xl border border-gold-400/30 gold-glow relative overflow-hidden">
+            <div class="text-center max-w-xl mx-auto mb-10">
+                <span class="text-xs uppercase tracking-[0.3em] text-gold-400 font-bold">Direct Principal Access</span>
+                <h2 class="font-architect text-3xl sm:text-5xl text-white mt-2">
+                    Commission An Architectural Study
+                </h2>
+                <p class="text-white/60 text-xs sm:text-sm font-light mt-2">
+                    We accept a strictly limited cohort of 12 private residential commissions annually.
+                </p>
+            </div>
+
+            <form onsubmit="handleInquiry(event)" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-white/70 mb-2 font-medium">Patron Name *</label>
+                        <input type="text" id="patronName" required placeholder="e.g. Yashvardhan Singhania" class="w-full px-4 py-3.5 rounded-xl bg-noir border border-white/10 text-white text-sm focus:border-gold-400 focus:outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-white/70 mb-2 font-medium">WhatsApp Contact *</label>
+                        <input type="tel" id="patronPhone" required placeholder="+91 98765 43210" class="w-full px-4 py-3.5 rounded-xl bg-noir border border-white/10 text-white text-sm focus:border-gold-400 focus:outline-none transition-colors">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-white/70 mb-2 font-medium">Project Typology *</label>
+                        <select id="projectType" required class="w-full px-4 py-3.5 rounded-xl bg-noir border border-white/10 text-white text-sm focus:border-gold-400 focus:outline-none transition-colors">
+                            <option value="Sky Penthouse / Duplex">Sky Penthouse / Duplex</option>
+                            <option value="Independent Luxury Villa / Estate">Independent Luxury Villa / Estate</option>
+                            <option value="Full Architectural Build from Scratch">Full Architectural Build from Scratch</option>
+                            <option value="Boutique Luxury Commercial / Lounge">Boutique Luxury Commercial / Lounge</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-white/70 mb-2 font-medium">Estimated Budget Tier *</label>
+                        <select id="projectBudget" required class="w-full px-4 py-3.5 rounded-xl bg-noir border border-white/10 text-white text-sm focus:border-gold-400 focus:outline-none transition-colors">
+                            <option value="₹50 Lakhs - ₹1 Crore">₹50 Lakhs - ₹1 Crore</option>
+                            <option value="₹1 Crore - ₹3 Crores">₹1 Crore - ₹3 Crores</option>
+                            <option value="₹3 Crores - ₹10 Crores+">₹3 Crores - ₹10 Crores+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-white/70 mb-2 font-medium">Spatial Vision / Site Location</label>
+                    <input type="text" id="projectVision" placeholder="e.g. 5BHK Penthouse at Civil Lines, modern Italian travertine look" class="w-full px-4 py-3.5 rounded-xl bg-noir border border-white/10 text-white text-sm focus:border-gold-400 focus:outline-none transition-colors">
+                </div>
+
+                <button type="submit" class="w-full py-4 rounded-full bg-gold-500 hover:bg-gold-400 text-noir text-xs font-bold uppercase tracking-widest transition-all hover:scale-[1.01] shadow-xl shadow-gold-500/25">
+                    Submit Private Commission Inquiry &rarr;
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-noir border-t border-white/5 py-12 text-center text-xs text-white/40">
+        <p class="font-architect text-xl text-white tracking-widest mb-2">ALORA ARCHITECTURE</p>
+        <p>Civil Lines • C-Scheme, Jaipur • Milan • Dubai</p>
+        <p class="mt-4 text-gold-400/80">&copy; 2026 ALORA Studio. Engineered for Ultra-Luxury Discerning Patrons.</p>
+    </footer>
+
+    <!-- INTERACTIVE PROJECT INSPECTION MODAL -->
+    <div id="projectModal" class="fixed inset-0 z-50 bg-noir/90 backdrop-blur-2xl hidden items-center justify-center p-6">
+        <div class="glass-panel max-w-2xl w-full rounded-3xl p-8 border border-gold-400/40 relative">
+            <button onclick="closeProjectModal()" class="absolute top-6 right-6 w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-gold-500 hover:text-noir transition-all">&times;</button>
+            
+            <img id="modalImg" src="" alt="Project Preview" class="w-full h-64 object-cover rounded-2xl mb-6 border border-white/10">
+            <h3 class="font-architect text-3xl text-white" id="modalTitle"></h3>
+            <p class="text-xs uppercase tracking-widest text-gold-400 font-bold mt-1" id="modalSubtitle"></p>
+            <p class="text-xs text-white/70 mt-3 font-light leading-relaxed" id="modalMaterials"></p>
+
+            <div class="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+                <span class="text-xs text-white/50">Consulting Architect: Principal Partner</span>
+                <a id="modalWhatsAppBtn" target="_blank" class="px-6 py-2.5 rounded-full bg-gold-500 text-noir text-xs font-bold uppercase tracking-wider hover:bg-gold-400 transition-all">
+                    Inquire On WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT: THREE.JS 3D CANVAS + CURTAIN SLIDER + LOGIC -->
+    <script>
+        // 1. THREE.JS INTERACTIVE 3D WEBGL HERO PAVILION
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 7;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // CREATE ARCHITECTURAL 3D WIREFRAME PAVILION
+        const geometry = new THREE.IcosahedronGeometry(3.2, 2);
+        const wireframeGeometry = new THREE.WireframeGeometry(geometry);
+        const lineMaterial = new THREE.LineBasicMaterial({
+            color: 0xD4AF37,
+            transparent: true,
+            opacity: 0.35,
+            linewidth: 1
+        });
+        const pavilion = new THREE.LineSegments(wireframeGeometry, lineMaterial);
+        scene.add(pavilion);
+
+        // INNER FLOATING METALLIC NUCLEUS
+        const innerGeom = new THREE.OctahedronGeometry(1.6, 0);
+        const innerMat = new THREE.MeshStandardMaterial({
+            color: 0xC5A059,
+            metalness: 0.9,
+            roughness: 0.2,
+            wireframe: false
+        });
+        const nucleus = new THREE.Mesh(innerGeom, innerMat);
+        scene.add(nucleus);
+
+        // LIGHTING
+        const pointLight = new THREE.PointLight(0xD4AF37, 2, 50);
+        pointLight.position.set(5, 5, 5);
+        scene.add(pointLight);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+
+        // MOUSE INTERACTION & SCROLL PARALLAX
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // ANIMATION LOOP
+        function animate() {
+            requestAnimationFrame(animate);
+
+            targetX = mouseX * 0.8;
+            targetY = mouseY * 0.8;
+
+            pavilion.rotation.y += 0.003;
+            pavilion.rotation.x += 0.001;
+
+            nucleus.rotation.y -= 0.006;
+            nucleus.rotation.z += 0.004;
+
+            // Camera reacts to mouse
+            camera.position.x += (targetX - camera.position.x) * 0.05;
+            camera.position.y += (targetY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // WINDOW RESIZE
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // 2. INTERACTIVE BEFORE & AFTER SLIDER LOGIC
+        const slider = document.getElementById('beforeAfterSlider');
+        const beforeLayer = document.getElementById('beforeLayer');
+        const handle = document.getElementById('sliderHandle');
+        let isSliding = false;
+
+        function setSliderPosition(x) {
+            const rect = slider.getBoundingClientRect();
+            let offsetX = x - rect.left;
+            if (offsetX < 0) offsetX = 0;
+            if (offsetX > rect.width) offsetX = rect.width;
+            const percentage = (offsetX / rect.width) * 100;
+            beforeLayer.style.width = percentage + '%';
+            handle.style.left = percentage + '%';
+        }
+
+        slider.addEventListener('mousedown', () => isSliding = true);
+        window.addEventListener('mouseup', () => isSliding = false);
+        window.addEventListener('mousemove', (e) => {
+            if (!isSliding) return;
+            setSliderPosition(e.clientX);
+        });
+
+        // Touch support for Mobile
+        slider.addEventListener('touchstart', () => isSliding = true);
+        window.addEventListener('touchend', () => isSliding = false);
+        window.addEventListener('touchmove', (e) => {
+            if (!isSliding) return;
+            setSliderPosition(e.touches[0].clientX);
+        });
+
+        // 3. MATERIAL PALETTE LAB SWITCHER
+        const materialsData = {
+            travertine: {
+                title: 'Roman Travertine & Warm Sunlight',
+                category: 'Honed Limewash Natural Stone',
+                img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'
+            },
+            calacatta: {
+                title: 'Bookmatched Calacatta Gold Marble',
+                category: 'Polished Italian Quartzite',
+                img: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80'
+            },
+            walnut: {
+                title: 'Ribbed Smoked American Walnut',
+                category: 'Acoustic Architectural Joinery',
+                img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80'
+            },
+            brass: {
+                title: 'Brushed Champagne Brass Accents',
+                category: 'Handcrafted Patinated Metal',
+                img: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80'
+            }
+        };
+
+        function selectMaterial(matKey, btn) {
+            document.querySelectorAll('.material-btn').forEach(b => {
+                b.classList.remove('border-gold-400', 'active');
+                b.classList.add('border-white/10');
+                b.querySelector('span:last-child').textContent = 'Select';
+                b.querySelector('span:last-child').className = 'text-xs font-bold text-white/40';
+            });
+            btn.classList.add('border-gold-400', 'active');
+            btn.classList.remove('border-white/10');
+            btn.querySelector('span:last-child').textContent = 'Selected';
+            btn.querySelector('span:last-child').className = 'text-xs font-bold text-gold-400';
+
+            const item = materialsData[matKey];
+            const img = document.getElementById('materialPreviewImage');
+            img.style.opacity = '0.3';
+            setTimeout(() => {
+                img.src = item.img;
+                document.getElementById('previewTitle').textContent = item.title;
+                document.getElementById('previewCategory').textContent = item.category;
+                img.style.opacity = '1';
+            }, 300);
+        }
+
+        // 4. PROJECT MODAL POPUP
+        function openProjectModal(title, subtitle, materials, imgUrl) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalSubtitle').textContent = subtitle;
+            document.getElementById('modalMaterials').textContent = 'Architectural Specification: ' + materials;
+            document.getElementById('modalImg').src = imgUrl;
+
+            const waMsg = encodeURIComponent(`Hello ALORA Architecture! 🏛️\n\nI am inspecting your project: *${title}* (${subtitle}).\n\nI want to discuss an architectural study for my private residence.`);
+            document.getElementById('modalWhatsAppBtn').href = `https://wa.me/919528582084?text=${waMsg}`;
+
+            document.getElementById('projectModal').classList.remove('hidden');
+            document.getElementById('projectModal').classList.add('flex');
+        }
+
+        function closeProjectModal() {
+            document.getElementById('projectModal').classList.add('hidden');
+            document.getElementById('projectModal').classList.remove('flex');
+        }
+
+        // 5. INQUIRY HANDLER
+        function openInquiryModal() {
+            document.getElementById('consultation').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => document.getElementById('patronName').focus(), 500);
+        }
+
+        function handleInquiry(e) {
+            e.preventDefault();
+            const name = document.getElementById('patronName').value;
+            const phone = document.getElementById('patronPhone').value;
+            const type = document.getElementById('projectType').value;
+            const budget = document.getElementById('projectBudget').value;
+            const vision = document.getElementById('projectVision').value;
+
+            const waMsg = encodeURIComponent(`Hello ALORA Architecture! 🏛️\n\nNew Commission Inquiry:\n• Patron: ${name}\n• Phone: ${phone}\n• Project Typology: ${type}\n• Budget Tier: ${budget}\n• Vision: ${vision}\n\nPlease schedule an architectural consultation.`);
+            window.open(`https://wa.me/919528582084?text=${waMsg}`, '_blank');
+        }
+    </script>
+</body>
+</html>
